@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/custom_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo azul -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#3F51B5" /> <!-- Color azul -->
+        </shape>
+    </item>
+
+    <!-- Rectángulo amarillo -->
+    <item
+        android:left="15dp"
+        android:right="15dp"
+        android:top="10dp"
+        android:bottom="10dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E4DB8A" /> <!-- Color amarillo -->
+            <corners android:radius="16dp"/> <!-- Bordes redondeados -->
+        </shape>
+    </item>
+</layer-list>
