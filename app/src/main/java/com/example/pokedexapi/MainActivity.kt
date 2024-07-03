@@ -39,33 +39,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i("MainActivity", "onCreate called")
-
 
         database = AppDatabase.getDatabase(this)
         pokeDao = database.pokeDao()
         typesDao = database.typesDao()
         evoDao = database.evoDao()
 
-
         recyclerView = findViewById(R.id.Rec_Poke)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-
 
         lifecycleScope.launch {
             try {
                 var storedPokemonsAdap = pokeDao.getAllPokemons()
-
                 if (storedPokemonsAdap.isEmpty()) {
-                    Log.i("MainActivity", "No records found")
-                    fetchAndStorePokemons(this@MainActivity)
-                } else {
-                    Log.i("MainActivity", "Records found")
+                    fetchAndStorePokemons()
                 }
 
                 storedPokemonsAdap = pokeDao.getAllPokemons()
-
 
                 adapter = Adapter(this@MainActivity, storedPokemonsAdap)
                 recyclerView.adapter = adapter
@@ -76,21 +66,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    private suspend fun loadPokemons() {
-        withContext(Dispatchers.IO) {
-            val pokemons = pokeDao.getAllPokemons()
-            withContext(Dispatchers.Main) {
-                adapter.setPokemons(pokemons)
-            }
-        }
-    }
-     */
-
-    suspend fun fetchAndStorePokemons(context: Context) {
+    private suspend fun fetchAndStorePokemons() {
         try {
             withContext(Dispatchers.IO) {
-
                 val response =RetrofitInstance.api.getPokemons("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0")
 
                 response.results.mapIndexed { index, pokemonResult ->
@@ -110,45 +88,12 @@ class MainActivity : AppCompatActivity() {
                             val responseEvo = RetrofitInstance.api.getEvolutions("https://pokeapi.co/api/v2/pokemon-species/${pokemonResult.name}")
                             evoDao.insertEvo(PokemonsEvo(name=pokemonResult.name,url=responseEvo.evolution_chain.url))
                         }
-
                 }
-
-                val storedPokemons = pokeDao.getAllPokemons()
-                /*
-                for (pokemon in storedPokemons) {
-                    Log.i("MainActivity","${pokemon.img},${pokemon.name}")
-                    withContext(Dispatchers.IO) {
-                        val responseTypes = RetrofitInstance.api.getPokemon(pokemon.url)
-                        responseTypes.types.map {
-                            typesDao.insertTypes(PokemonsTypes(name = pokemon.name, type = it.type.name))
-                        }
-                    }
-
-                    withContext(Dispatchers.IO) {
-                        val responseEvo = RetrofitInstance.api.getEvolutions("https://pokeapi.co/api/v2/pokemon-species/${pokemon.name}")
-                        evoDao.insertEvo(PokemonsEvo(name=pokemon.name,url=responseEvo.evolution_chain.url))
-                    }
-
-                }
-
-                 */
             }
         }catch (e: Exception) {
                 Log.i("MainActivity", "Error fetching or storing pokemons: ${e.message}")
             }
-
     }
-
-
-
-    private suspend fun deleteAllPokemon() {
-        withContext(Dispatchers.IO) {
-            pokeDao.deleteAll()
-            typesDao.deleteTypes()
-            evoDao.deleteEvo()
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()

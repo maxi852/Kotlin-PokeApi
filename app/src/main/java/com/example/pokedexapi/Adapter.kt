@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide
 
 
 class Adapter(val context: Context,private val pokemonList: List<PokemonsModel>) : RecyclerView.Adapter<Adapter.PokeViewHolder>(){
-    private var pokemons: List<PokemonsModel> = emptyList()
 
     inner class PokeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameElem: TextView = view.findViewById(R.id.item_name)
@@ -44,9 +43,6 @@ class Adapter(val context: Context,private val pokemonList: List<PokemonsModel>)
         }
     }
 
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokeViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PokeViewHolder(layoutInflater.inflate(R.layout.item_list, parent, false))
@@ -64,8 +60,4 @@ class Adapter(val context: Context,private val pokemonList: List<PokemonsModel>)
         return pokemonList.size
     }
 
-    fun setPokemons(pokemons: List<PokemonsModel>) {
-        this.pokemons = pokemons
-        notifyDataSetChanged()
-    }
 }

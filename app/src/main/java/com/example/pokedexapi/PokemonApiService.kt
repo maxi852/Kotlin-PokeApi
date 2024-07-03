@@ -56,7 +56,7 @@ data class Type(
 object RetrofitInstance {
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://pokeapi.co/api/v2/") // Se necesita, pero no se usará realmente
+            .baseUrl("https://pokeapi.co/api/v2/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -62,12 +62,6 @@ class DetailActivity : AppCompatActivity() {
                 Log.i("MainActivity","${ev.name}")
                 createImageView(ev.img)
             }
-            /*
-          var previousViewId = R.id.detail_type // Primer elemento será debajo de detail_type
-          for ((index, typePk) in types.withIndex()) {
-              previousViewId = createEditTextNextTo(typePk.type, previousViewId)
-          }
-          */
 
         }
     }
@@ -80,7 +74,7 @@ class DetailActivity : AppCompatActivity() {
                 300  // Altura definida en píxeles
             )
             setPadding(8, 8, 8, 8)
-            setBackgroundColor(Color.TRANSPARENT) // Si quieres asegurar que el fondo sea transparente
+            setBackgroundColor(Color.TRANSPARENT)
         }
         Glide.with(this)
             .load(text)
